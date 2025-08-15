@@ -1,0 +1,57 @@
+{
+    "name": "genereleaselog",
+    "type": "module",
+    "version": "0.0.0-apha.1",
+    "private": true,
+    "description": "",
+    "author": "lonewolfyx <olddrivero.king@qq.com>",
+    "license": "MIT",
+    "homepage": "https://github.com/ScaffoldCore/genereleaselog",
+    "bugs": {
+        "url": "https://github.com/ScaffoldCore/genereleaselog/issues"
+    },
+    "keywords": [],
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "bin": {
+        "genereleaselog": "./src/bin/index.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "dev": "tsdown --watch",
+        "build": "tsdown",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "ansis": "^4.1.0",
+        "c12": "^3.2.0",
+        "cac": "^6.7.14",
+        "convert-gitmoji": "^0.1.5",
+        "ofetch": "^1.4.1",
+        "tinyexec": "^1.0.1"
+    },
+    "devDependencies": {
+        "@antfu/eslint-config": "^5.2.1",
+        "@lonewolfyx/tsconfig": "^0.0.5",
+        "@types/node": "^24.2.1",
+        "eslint": "^9.33.0",
+        "lint-staged": "^16.1.5",
+        "simple-git-hooks": "^2.13.1",
+        "tsdown": "^0.14.1",
+        "tsx": "^4.20.4",
+        "typescript": "^5.9.2"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "npx lint-staged"
+    },
+    "lint-staged": {
+        "*": "eslint --fix"
+    }
+}
