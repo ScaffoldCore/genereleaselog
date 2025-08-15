@@ -7,7 +7,7 @@ export function generateMarkdown(commits: IGitCommit, options: IChangelogOptions
     for (const [_, commit] of Object.entries(commits)) {
         lines.push(`### ${commit.title}\n`)
         for (const row of commit.commits) {
-            lines.push(`- ${row.message} - by **${row.author.authorName}** [<samp>(${row.shortHash})</samp>](https://github.com/${options.owner}/${options.repo}/commit/${row.shortHash})\n`)
+            lines.push(`- ${row.message} - by **@${row.author.authorName}** [<samp>(${row.shortHash})</samp>](https://github.com/${options.owner}/${options.repo}/commit/${row.shortHash})\n`)
         }
     }
 
