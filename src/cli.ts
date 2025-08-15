@@ -35,8 +35,8 @@ cli.command('')
 
         if (!config.token) {
             console.error(red('No GitHub token found, specify it via GITHUB_TOKEN env. Release skipped.'))
-            process.exitCode = 1
             printWebUrl()
+            process.exit(1)
         }
 
         await createRelease(config, markdown)
