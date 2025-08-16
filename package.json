@@ -1,15 +1,22 @@
 {
     "name": "genereleaselog",
     "type": "module",
-    "version": "0.0.1",
-    "description": "",
+    "version": "0.0.2",
+    "description": "Generate the Release log in accordance with the GitHub Conventional Commits",
     "author": "lonewolfyx <olddrivero.king@qq.com>",
     "license": "MIT",
     "homepage": "https://github.com/ScaffoldCore/genereleaselog",
     "bugs": {
         "url": "https://github.com/ScaffoldCore/genereleaselog/issues"
     },
-    "keywords": [],
+    "keywords": [
+        "github",
+        "release",
+        "releases",
+        "conventional",
+        "changelog",
+        "log"
+    ],
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
