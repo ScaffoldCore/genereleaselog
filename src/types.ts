@@ -9,6 +9,7 @@ export interface IChangelogOptions {
     baseUrlApi?: string
     version: string
     token?: string
+    output?: string
 }
 
 export interface IOptions {
@@ -16,6 +17,7 @@ export interface IOptions {
     'token'?: string
     'from'?: string
     'to'?: string
+    'output'?: string
 }
 
 export interface IRawGitCommit {

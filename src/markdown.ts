@@ -20,3 +20,13 @@ export function generateMarkdown(commits: IGitCommit, options: IChangelogOptions
 
     return convert(lines.join('\n').trim(), true)
 }
+
+export function generateChangelog(content: string, options: IChangelogOptions) {
+    const lines: string[] = []
+
+    lines.push(`## ${options.version}\n`)
+
+    lines.push(content)
+
+    return convert(lines.join('\n').trim(), true)
+}
