@@ -1,11 +1,9 @@
 import type { IOptions } from '@/src/types.ts'
-import { writeFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
 import { blue, cyan, dim, red, yellow } from 'ansis'
 import cac from 'cac'
+import { writeChangeLog } from '@/src/changelog.ts'
 import { generate } from '@/src/generate.ts'
 import { createRelease } from '@/src/github.ts'
-import { generateChangelog } from '@/src/markdown.ts'
 import { version } from '../package.json'
 
 const cli = cac('genereleaselog')
@@ -38,10 +36,7 @@ cli.command('')
         }
 
         if (config.output && config.output !== 'false') {
-            await writeFile(resolve(config.cwd, config.output), `${generateChangelog(markdown, config)}\n\n`, {
-                encoding: 'utf-8',
-                flag: 'a',
-            })
+            await writeChangeLog(markdown, config)
         }
 
         if (!config.token) {
