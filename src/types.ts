@@ -10,6 +10,7 @@ export interface IChangelogOptions {
     version: string
     token?: string
     output?: string
+    filter?: string
 }
 
 export interface IOptions {
@@ -18,6 +19,7 @@ export interface IOptions {
     'from'?: string
     'to'?: string
     'output'?: string
+    'filter'?: string
 }
 
 export interface IRawGitCommit {

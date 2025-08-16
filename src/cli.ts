@@ -13,6 +13,7 @@ cli.command('')
     .option('--from <ref>', 'From tag')
     .option('--to <ref>', 'To tag')
     .option('--output <output>', 'Output file path', { default: 'CHANGELOG.md' })
+    .option('--filter <filter>', 'Filter Conventional Commits Type', { default: '' })
     .action(async (options: IOptions) => {
         console.log()
         console.log(dim(`genereleaselog `) + dim(`v${version}`))

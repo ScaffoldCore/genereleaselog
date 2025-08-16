@@ -1,6 +1,7 @@
 import type { IChangelogOptions, IOptions } from '@/src/types.ts'
 import * as process from 'node:process'
 import { getGithubRepo, getLastTagCommit, getLatestTag, getMatchingTagsCommit } from '@/src/git.ts'
+import { filterGitCommitsType } from '@/src/utils.ts'
 
 const defaultConfig = {
     types: {
@@ -74,6 +75,8 @@ export async function resolveConfig(options: IOptions) {
     const remote = await getGithubRepo(config.cwd)
     config.owner = remote.owner
     config.repo = remote.repo
+
+    config.types = options.filter && options.filter !== '' ? filterGitCommitsType(config.types, options.filter.split(',')) : config.types
 
     return config
 }
