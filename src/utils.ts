@@ -1,3 +1,8 @@
+/**
+ * Filter git commits type
+ * @param obj
+ * @param keysToRemove
+ */
 export function filterGitCommitsType<T extends object, K extends keyof T>(
     obj: T,
     keysToRemove: K[],
