@@ -1,8 +1,8 @@
-import type { IChangelogOptions } from '@/src/types.ts'
+import type { ResolvedChangelogOptions } from '@/src/types.ts'
 import { green } from 'ansis'
 import { $fetch } from 'ofetch'
 
-export async function createRelease(options: IChangelogOptions, markdown: string) {
+export async function createRelease(options: ResolvedChangelogOptions, markdown: string) {
     const header = {
         accept: 'application/vnd.github.v3+json',
         authorization: `token ${options.token}`,

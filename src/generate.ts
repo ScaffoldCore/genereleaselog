@@ -1,11 +1,11 @@
-import type { IChangelogOptions, IGitCommit, IOptions } from '@/src/types.ts'
+import type { IGitCommit, ResolvedChangelogOptions } from '@/src/types.ts'
 import { resolveConfig } from '@/src/config.ts'
 import { getCommitLogs } from '@/src/git.ts'
 import { generateMarkdown } from '@/src/markdown.ts'
 import { parseCommits } from '@/src/parse.ts'
 
-export async function generate(options: IOptions): Promise<{
-    config: IChangelogOptions
+export async function generate(options: ResolvedChangelogOptions): Promise<{
+    config: ResolvedChangelogOptions
     commits: IGitCommit
     markdown: string
     rawCommits: string[]

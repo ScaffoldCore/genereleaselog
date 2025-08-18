@@ -1,7 +1,7 @@
-import type { IChangelogOptions, IGitCommit } from '@/src/types.ts'
+import type { IGitCommit, ResolvedChangelogOptions } from '@/src/types.ts'
 import { convert } from 'convert-gitmoji'
 
-export function generateMarkdown(commits: IGitCommit, options: IChangelogOptions) {
+export function generateMarkdown(commits: IGitCommit, options: ResolvedChangelogOptions) {
     const lines: string[] = []
 
     for (const [_, commit] of Object.entries(commits)) {

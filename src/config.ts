@@ -1,5 +1,4 @@
-import type { IChangelogOptions, IOptions } from '@/src/types.ts'
-import * as process from 'node:process'
+import type { IChangelogOptions, ResolvedChangelogOptions } from '@/src/types.ts'
 import { getGithubRepo, getLastTagCommit, getLatestTag, getMatchingTagsCommit } from '@/src/git.ts'
 import { filterGitCommitsType } from '@/src/utils.ts'
 
@@ -48,15 +47,15 @@ const defaultConfig = {
     version: '',
 } satisfies IChangelogOptions
 
-// 获取配置
-export async function resolveConfig(options: IOptions) {
+/**
+ * Resolve config
+ * @param options
+ */
+export async function resolveConfig(options: IChangelogOptions) {
     const { loadConfig } = await import('c12')
-
     const config = await loadConfig<IChangelogOptions>({
         name: 'genereleaselog',
         defaults: defaultConfig,
-        // eslint-disable-next-line ts/ban-ts-comment
-        // @ts-expect-error
         overrides: options,
     }).then((r) => {
         return {
@@ -64,9 +63,9 @@ export async function resolveConfig(options: IOptions) {
             cwd: r.cwd || process.cwd(),
         }
     })
+
     config.baseUrl = config.baseUrl ?? 'github.com'
     config.baseUrlApi = config.baseUrlApi ?? 'api.github.com'
-
     config.token = config.token || process.env.GITHUB_TOKEN
     config.version = config.version || await getLatestTag(config.cwd)
     config.from = config.from || await getMatchingTagsCommit(config.cwd)
@@ -78,5 +77,5 @@ export async function resolveConfig(options: IOptions) {
 
     config.types = options.filter && options.filter !== '' ? filterGitCommitsType(config.types, options.filter.split(',')) : config.types
 
-    return config
+    return config as ResolvedChangelogOptions
 }

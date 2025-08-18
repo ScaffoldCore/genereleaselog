@@ -1,10 +1,10 @@
-import type { IChangelogOptions } from '@/src/types.ts'
+import type { ResolvedChangelogOptions } from '@/src/types.ts'
 import { createReadStream, createWriteStream } from 'node:fs'
 import { rename } from 'node:fs/promises'
 import * as path from 'node:path'
 import { convert } from 'convert-gitmoji'
 
-export async function writeChangeLog(content: string, options: IChangelogOptions) {
+export async function writeChangeLog(content: string, options: ResolvedChangelogOptions) {
     const lines: string[] = []
 
     lines.push(`## ${options.version}\n`)

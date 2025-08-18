@@ -1,4 +1,4 @@
-import type { IOptions } from '@/src/types.ts'
+import type { IChangelogOptions } from '@/src/types.ts'
 import { blue, cyan, dim, red, yellow } from 'ansis'
 import cac from 'cac'
 import { writeChangeLog } from '@/src/changelog.ts'
@@ -9,17 +9,17 @@ import { version } from '../package.json'
 const cli = cac('genereleaselog')
 
 cli.command('')
-    .option('--token <token>', 'Github Token')
-    .option('--from <ref>', 'From tag')
-    .option('--to <ref>', 'To tag')
+    .option('--token <token>', 'Github Token', { default: '' })
+    .option('--from <ref>', 'From tag', { default: '' })
+    .option('--to <ref>', 'To tag', { default: '' })
     .option('--output <output>', 'Output file path', { default: 'CHANGELOG.md' })
     .option('--filter <filter>', 'Filter Conventional Commits Type', { default: '' })
-    .action(async (options: IOptions) => {
+    .action(async (options: IChangelogOptions) => {
         console.log()
         console.log(dim(`genereleaselog `) + dim(`v${version}`))
         console.log()
 
-        const { config, rawCommits, markdown } = await generate(options)
+        const { config, rawCommits, markdown } = await generate(options as any)
         const webUrl = `https://${config.baseUrl}/${config.owner}/${config.repo}/releases/new?title=${encodeURIComponent(String(config.version))}&body=${encodeURIComponent(String(markdown))}&tag=${encodeURIComponent(String(config.version))}`
 
         console.log(cyan(config.from) + dim(' -> ') + blue(config.to) + dim(` (${rawCommits.length} commits)`))

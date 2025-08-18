@@ -1,6 +1,6 @@
-import type { IChangelogOptions, IGitCommit, IRawGitCommit } from '@/src/types.ts'
+import type { IGitCommit, IRawGitCommit, ResolvedChangelogOptions } from '@/src/types.ts'
 
-export function parseCommits(commit: string, options: IChangelogOptions): IGitCommit {
+export function parseCommits(commit: string, options: ResolvedChangelogOptions): IGitCommit {
     const commits = commit.split('\n').map((item: string) => {
         const [commits, shortHash, body, authorName, authorEmail, date] = item.split('|')
 
