@@ -81,8 +81,9 @@ export async function getCommitByTag(tag: string, cwd: string): Promise<string> 
  * @param cwd
  */
 export async function getCommitLogs(from: string, to: string, cwd: string): Promise<string> {
-    // git log <from>>..<to> --pretty=format:"%H|%h|%s|%an|%ae|%ad" --date=format:"%Y-%m-%d %H:%M:%S"
+    // git --no-pager log <from>>..<to> --pretty=format:"%H|%h|%s|%an|%ae|%ad" --date=format:"%Y-%m-%d %H:%M:%S"
     return await execCommand('git', [
+        '--no-pager',
         'log',
         `${from}..${to}`,
         '--pretty=format:"%H|%h|%s|%an|%ae|%ad"',
