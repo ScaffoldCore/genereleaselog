@@ -1,8 +1,8 @@
-export type types = Record<string, { title: string }>
+export type ConfigTypes = Record<string, { title: string }>
 
 export interface IChangelogOptions {
     '--'?: any[]
-    'types': types
+    'types': ConfigTypes
     'from'?: string
     'to'?: string
     'cwd'?: string
@@ -36,7 +36,7 @@ export type IGitCommit = Record<string, {
 }>
 
 interface IUserConfigBase {
-    types?: types
+    types?: ConfigTypes
     overrideTypes?: boolean
 }
 

@@ -1,4 +1,4 @@
-import type { IChangelogOptions, IUserConfig, ResolvedChangelogOptions, types } from '@/src/types.ts'
+import type { ConfigTypes, IChangelogOptions, IUserConfig, ResolvedChangelogOptions } from '@/src/types.ts'
 import { resolve } from 'node:path'
 import { findUp } from 'find-up'
 import { createJiti } from 'jiti'
@@ -106,7 +106,7 @@ export async function resolveConfig(options: IChangelogOptions) {
     return config as ResolvedChangelogOptions
 }
 
-export function applyIncludeExclude(types: types, userConfig: IUserConfig): types {
+export function applyIncludeExclude(types: ConfigTypes, userConfig: IUserConfig): ConfigTypes {
     if (userConfig.include && userConfig.exclude) {
         return filterGitCommitsType(
             pick(types, normalizeArray(userConfig.include)),
