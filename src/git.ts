@@ -1,4 +1,4 @@
-import { x } from 'tinyexec'
+import { execCommand } from '@/src/exec.ts'
 
 /**
  * Get github repo
@@ -89,13 +89,4 @@ export async function getCommitLogs(from: string, to: string, cwd: string): Prom
         '--pretty=format:"%H|%h|%s|%an|%ae|%ad"',
         '--date=format:"%Y-%m-%d %H:%M:%S"',
     ], cwd)
-}
-
-export async function execCommand(cmd: string, args: string[], cwd: string): Promise<string> {
-    return (await x(cmd, args, {
-        nodeOptions: {
-            cwd,
-            shell: true,
-        },
-    })).stdout.trim()
 }
