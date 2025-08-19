@@ -30,6 +30,24 @@ export interface IRawGitCommit {
     date: string
 }
 
+export interface IParseCommit {
+    raw: IRawGitCommit
+    type: string
+    scope: string
+    message: string
+    pr: string
+    issue: string
+}
+
+export type CategoryGitCommit = Record<string, ICategoryRawCommit>
+
+export interface ICategoryRawCommit {
+    title: string
+    scopes: GitScopeCommit
+}
+
+export type GitScopeCommit = Record<string, IParseCommit[]>
+
 export type IGitCommit = Record<string, {
     title: string
     commits: IRawGitCommit[]
