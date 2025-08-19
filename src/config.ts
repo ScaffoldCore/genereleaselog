@@ -1,6 +1,10 @@
-import type { IChangelogOptions, ResolvedChangelogOptions } from '@/src/types.ts'
+import type { IChangelogOptions, IUserConfig, ResolvedChangelogOptions, types } from '@/src/types.ts'
+import { resolve } from 'node:path'
+import { findUp } from 'find-up'
+import { createJiti } from 'jiti'
+import { DEFAULT_CONFIG_FILES } from '@/src/constants.ts'
 import { getGithubRepo, getLastTagCommit, getLatestTag, getMatchingTagsCommit } from '@/src/git.ts'
-import { filterGitCommitsType } from '@/src/utils.ts'
+import { filterGitCommitsType, mergeConfig, normalizeArray, pick } from '@/src/utils.ts'
 
 const defaultConfig = {
     types: {
@@ -47,6 +51,10 @@ const defaultConfig = {
     version: '',
 } satisfies IChangelogOptions
 
+export function defineConfig(config: IUserConfig): IUserConfig {
+    return config
+}
+
 /**
  * Resolve config
  * @param options
@@ -75,7 +83,58 @@ export async function resolveConfig(options: IChangelogOptions) {
     config.owner = remote.owner
     config.repo = remote.repo
 
-    config.types = options.filter && options.filter !== '' ? filterGitCommitsType(config.types, options.filter.split(',')) : config.types
+    const loaderResult = await loadConfigFromFile(config.cwd)
+
+    if (loaderResult) {
+        let types = config.types
+
+        if (loaderResult.overrideTypes && loaderResult.types) {
+            types = mergeConfig(types, loaderResult.types)
+        }
+        else {
+            types = loaderResult.types ?? types
+        }
+
+        config.types = Object.fromEntries(
+            Object.entries(applyIncludeExclude(types, loaderResult)).filter(([_, value]) => value !== undefined),
+        )
+    }
+    else {
+        config.types = options.filter && options.filter !== '' ? filterGitCommitsType(config.types, options.filter.split(',')) : config.types
+    }
 
     return config as ResolvedChangelogOptions
+}
+
+export function applyIncludeExclude(types: types, userConfig: IUserConfig): types {
+    if (userConfig.include && userConfig.exclude) {
+        return filterGitCommitsType(
+            pick(types, normalizeArray(userConfig.include)),
+            normalizeArray(userConfig.exclude),
+        )
+    }
+
+    if (userConfig.exclude)
+        return filterGitCommitsType(types, normalizeArray(userConfig.exclude))
+
+    if (userConfig.include)
+        return pick(types, normalizeArray(userConfig.include))
+
+    return types
+}
+
+export async function loadConfigFromFile(cwd: string): Promise<IUserConfig | null> {
+    const resolvedPath = await findUp(
+        DEFAULT_CONFIG_FILES.map((filePath: string) => resolve(cwd, filePath)),
+    ) as string | undefined
+
+    if (!resolvedPath) {
+        return null
+    }
+
+    const loader = createJiti(cwd, {
+        extensions: ['.js', '.ts', '.mjs', '.cjs', '.mts', '.cts'],
+    })
+
+    return await loader.import(resolvedPath, { default: true })
 }

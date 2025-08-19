@@ -1,6 +1,8 @@
+export type types = Record<string, { title: string }>
+
 export interface IChangelogOptions {
     '--'?: any[]
-    'types': Record<string, { title: string }>
+    'types': types
     'from'?: string
     'to'?: string
     'cwd'?: string
@@ -32,3 +34,23 @@ export type IGitCommit = Record<string, {
     title: string
     commits: IRawGitCommit[]
 }>
+
+interface IUserConfigBase {
+    types?: types
+    overrideTypes?: boolean
+}
+
+type ExclusiveConfig<T> = T extends { include: any }
+    ? T extends { exclude: any }
+        ? never // Never when both include and exclude exist
+        : T
+    : T extends { exclude: any }
+        ? T
+        : T
+
+export type IUserConfig = ExclusiveConfig<
+    IUserConfigBase & {
+        include?: string | string[]
+        exclude?: string | string[]
+    }
+>
