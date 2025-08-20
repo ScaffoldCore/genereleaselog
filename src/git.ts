@@ -2,19 +2,21 @@ import { execCommand } from '@/src/exec.ts'
 
 /**
  * Get github repo
+ * @param baseUrl
  * @param cwd
  */
-export async function getGithubRepo(cwd: string): Promise<{ owner: string, repo: string }> {
+export async function getGithubRepo(baseUrl: string, cwd: string): Promise<{ owner: string, repo: string }> {
     // git config --get remote.origin.url | sed -E 's#(git@|https://)github.com[:/]([^/]+)/([^/]+)\.git#{"owner":"\2","repo":"\3"}#'
     const url = await execCommand('git', ['config', '--get', 'remote.origin.url'], cwd)
-    const {
-        owner,
-        repo,
-    } = JSON.parse(url.replace(/(git@|https:\/\/)github\.com[:/]([^/]+)\/([^/]+)\.git/, '{"owner":"$2","repo":"$3"}'))
+    const escapedBaseUrl = baseUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const regex = new RegExp(`${escapedBaseUrl}[\/:]([\\w\\d._-]+?)\\/([\\w\\d._-]+?)(\\.git)?$`, 'i')
+    const match = regex.exec(url)
+    if (!match)
+        throw new Error(`Can not parse GitHub repo from url ${url}`)
 
     return {
-        owner,
-        repo,
+        owner: match[1] as string,
+        repo: match[2] as string,
     }
 }
 

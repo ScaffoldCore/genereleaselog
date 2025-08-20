@@ -79,7 +79,7 @@ export async function resolveConfig(options: IChangelogOptions) {
     config.from = config.from || await getMatchingTagsCommit(config.cwd)
     config.to = config.to || await getLastTagCommit(config.cwd)
 
-    const remote = await getGithubRepo(config.cwd)
+    const remote = await getGithubRepo(config.baseUrl, config.cwd)
     config.owner = remote.owner
     config.repo = remote.repo
 
