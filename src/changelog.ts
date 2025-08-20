@@ -1,5 +1,5 @@
 import type { ResolvedChangelogOptions } from '@/src/types.ts'
-import { createReadStream, createWriteStream } from 'node:fs'
+import { createReadStream, createWriteStream, existsSync, writeFileSync } from 'node:fs'
 import { rename } from 'node:fs/promises'
 import * as path from 'node:path'
 import { convert } from 'convert-gitmoji'
@@ -14,6 +14,9 @@ export async function writeChangeLog(content: string, options: ResolvedChangelog
     const logMD = convert(lines.join('\n').trim(), true)
 
     const filePath = path.resolve(options.cwd, options?.output || 'CHANGELOG.md')
+    if (!existsSync(filePath)) {
+        writeFileSync(filePath, '')
+    }
     const tmpFile = `${filePath}.tmp`
 
     const ws = createWriteStream(tmpFile, { encoding: 'utf-8' })
