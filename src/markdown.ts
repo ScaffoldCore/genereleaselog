@@ -4,6 +4,10 @@ import { convert } from 'convert-gitmoji'
 export function generateMarkdown(commits: CategoryGitCommit, options: ResolvedChangelogOptions) {
     const lines: string[] = []
 
+    if (options.description) {
+        lines.push(`${options.description}`)
+    }
+
     for (const [_, raw] of Object.entries(commits)) {
         lines.push(`### ${raw.title}\n`)
         for (const scope in raw.scopes as GitScopeCommit) {

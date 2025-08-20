@@ -15,6 +15,7 @@ export interface IChangelogOptions {
     'output'?: string
     'filter'?: string
     'assets'?: string | string[]
+    'description'?: string
 }
 
 export type ResolvedChangelogOptions = Required<IChangelogOptions>
@@ -58,6 +59,7 @@ interface IUserConfigBase {
     types?: ConfigTypes
     overrideTypes?: boolean
     assets?: string | string[]
+    description?: string
 }
 
 type ExclusiveConfig<T> = T extends { include: any }

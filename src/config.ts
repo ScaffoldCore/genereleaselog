@@ -100,6 +100,7 @@ export async function resolveConfig(options: IChangelogOptions) {
         )
 
         config.assets = loaderResult.assets
+        config.description = loaderResult.description
     }
     else {
         config.types = options.filter && options.filter !== '' ? filterGitCommitsType(config.types, options.filter.split(',')) : config.types

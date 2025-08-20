@@ -15,6 +15,7 @@ cli.command('')
     .option('--output <output>', 'Output file path', { default: 'CHANGELOG.md' })
     .option('--filter <filter>', 'Filter Conventional Commits Type', { default: '' })
     .option('--assets <assets...>', 'Files to upload as assets to the release. Use quotes to prevent shell glob expansion, e.g., "--assets \'dist/*.js\'"')
+    .option('--description <description>', 'Changelog release placeholder description', { default: '' })
     .action(async (options: IChangelogOptions) => {
         console.log()
         console.log(dim(`genereleaselog `) + dim(`v${version}`))
