@@ -44,6 +44,7 @@
         "convert-gitmoji": "^0.1.5",
         "eslint-plugin-yml": "^1.18.0",
         "find-up": "^7.0.0",
+        "glob": "^11.0.3",
         "jiti": "^2.5.1",
         "ofetch": "^1.4.1",
         "tinyexec": "^1.0.1",

@@ -3,7 +3,7 @@ import { blue, cyan, dim, red, yellow } from 'ansis'
 import cac from 'cac'
 import { writeChangeLog } from '@/src/changelog.ts'
 import { generate } from '@/src/generate.ts'
-import { createRelease } from '@/src/github.ts'
+import { createRelease, updateReleaseAssets } from '@/src/github.ts'
 import { version } from '../package.json'
 
 const cli = cac('genereleaselog')
@@ -14,6 +14,7 @@ cli.command('')
     .option('--to <ref>', 'To tag', { default: '' })
     .option('--output <output>', 'Output file path', { default: 'CHANGELOG.md' })
     .option('--filter <filter>', 'Filter Conventional Commits Type', { default: '' })
+    .option('--assets <assets...>', 'Files to upload as assets to the release. Use quotes to prevent shell glob expansion, e.g., "--assets \'dist/*.js\'"')
     .action(async (options: IChangelogOptions) => {
         console.log()
         console.log(dim(`genereleaselog `) + dim(`v${version}`))
@@ -46,7 +47,11 @@ cli.command('')
             process.exit(1)
         }
 
-        await createRelease(config, markdown)
+        const release = await createRelease(config, markdown)
+
+        if (config.assets && config) {
+            await updateReleaseAssets(config, release)
+        }
     })
 
 cli.help()

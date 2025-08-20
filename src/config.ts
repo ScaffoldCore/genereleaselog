@@ -98,6 +98,8 @@ export async function resolveConfig(options: IChangelogOptions) {
         config.types = Object.fromEntries(
             Object.entries(applyIncludeExclude(types, loaderResult)).filter(([_, value]) => value !== undefined),
         )
+
+        config.assets = loaderResult.assets
     }
     else {
         config.types = options.filter && options.filter !== '' ? filterGitCommitsType(config.types, options.filter.split(',')) : config.types

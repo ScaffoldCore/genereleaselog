@@ -14,6 +14,7 @@ export interface IChangelogOptions {
     'token'?: string
     'output'?: string
     'filter'?: string
+    'assets'?: string | string[]
 }
 
 export type ResolvedChangelogOptions = Required<IChangelogOptions>
@@ -56,6 +57,7 @@ export type IGitCommit = Record<string, {
 interface IUserConfigBase {
     types?: ConfigTypes
     overrideTypes?: boolean
+    assets?: string | string[]
 }
 
 type ExclusiveConfig<T> = T extends { include: any }
@@ -72,3 +74,19 @@ export type IUserConfig = ExclusiveConfig<
         exclude?: string | string[]
     }
 >
+
+export interface IReleaseResult {
+    url: string
+    html_url: string
+    assets_url: string
+    upload_url: string
+    tarball_url: string
+    zipball_url: string
+    discussion_url: string
+    id: string
+    node_id: string
+    tag_name: string
+    target_commitish: string
+    name: string
+    body: string
+}
