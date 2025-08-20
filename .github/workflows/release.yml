@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: lts/*
 
+      - run: npm install
+      - run: npm run build
       - run: npx genereleaselog
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.ACCESS_TOKEN}}
