@@ -25,7 +25,6 @@ jobs:
       - name: Debug TypeScript files
         run: npx tsc --noEmit --project tsconfig.json
 
-      - run: npm run build
-      - run: npx genereleaselog
+      - run: tsx src/cli.ts
         env:
-          GITHUB_TOKEN: ${{secrets.ACCESS_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
