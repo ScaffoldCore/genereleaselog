@@ -31,7 +31,8 @@
         "build": "tsdown",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
-        "release": "npm run build && npm publish"
+        "release": "npm run build && npm publish",
+        "git:release": "tsx src/cli.ts"
     },
     "publishConfig": {
         "registry": "https://registry.npmjs.org",
