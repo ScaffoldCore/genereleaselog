@@ -39,6 +39,7 @@ export interface IParseCommit {
     message: string
     pr: string
     issue: string
+    breaking: string
 }
 
 export type CategoryGitCommit = Record<string, ICategoryRawCommit>

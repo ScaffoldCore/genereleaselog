@@ -35,7 +35,9 @@ export function parseCommits(commit: string): IParseCommit[] {
         .filter(isNotNull)
 }
 
-const ConventionalCommitRegex = /^(?<type>\w+)(?:\((?<scope>[^)]+)\))?: (?<message>.+?)(?: \((?<pr>#\d+)\))?$/
+const ConventionalCommitRegex = /^(?<breaking>!)?(?<type>[a-z]+)(?:\((?<scope>[^)]+)\))?(?<breaking1>!)?: (?<message>.+?)(?: \((?<pr>#\d+)\))?$/i
+// /^(?<type>\w+)(?:\((?<scope>[^)]+)\))?: (?<message>.+?)(?: \((?<pr>#\d+)\))?$/
+
 const IssueRE = /(#\d+)/
 
 /**
@@ -48,7 +50,7 @@ export function parseGitCommit(commit: IRawGitCommit): IParseCommit | null {
         return null
     }
 
-    const [, type = '', scope = '', message = '', pr = ''] = match
+    const [, breaking = '', type = '', scope = '', breaking1 = '', message = '', pr = ''] = match
     const issue = commit.message.match(IssueRE)
 
     return {
@@ -58,44 +60,47 @@ export function parseGitCommit(commit: IRawGitCommit): IParseCommit | null {
         message: message.trim(),
         pr,
         issue: issue ? pr !== issue[0] ? issue[0] : '' : '',
+        breaking: breaking || breaking1,
     }
 }
 
+interface Category {
+    title: string
+    scopes: Record<string, IParseCommit[]>
+}
+
 export function groupByCommits(commits: IParseCommit[], options: ResolvedChangelogOptions): CategoryGitCommit {
-    const categories: CategoryGitCommit = {}
-
     const configTypes: ConfigTypes = options.types
+    const BREAKING_KEY = 'breaking'
 
-    // init configTypes
-    for (const [type, config] of Object.entries(configTypes)) {
-        categories[type] = {
-            title: config.title,
-            scopes: {},
-        }
+    const categories: Record<string, Category> = {
+        [BREAKING_KEY]: { title: 'Breaking Changes', scopes: {} },
+        ...Object.fromEntries(
+            Object.entries(configTypes).map(([type, config]) => [
+                type,
+                { title: config.title, scopes: {} },
+            ]),
+        ),
     }
 
     for (const parsed of commits) {
-        const { type, scope } = parsed as IParseCommit
+        const { type, scope, breaking } = parsed
 
-        if (!configTypes[type])
+        const categoryKey = breaking ? BREAKING_KEY : configTypes[type] ? type : null
+        if (!categoryKey)
             continue
 
-        // Without scope is classified as "other"
         const scopeKey = scope || 'other'
+        const category = categories[categoryKey]!
 
-        if (!categories[type]) {
-            categories[type] = { title: type, scopes: {} }
-        }
-        if (!categories[type].scopes[scopeKey]) {
-            categories[type].scopes[scopeKey] = []
+        if (!category.scopes[scopeKey]) {
+            category.scopes[scopeKey] = []
         }
 
-        categories[type].scopes[scopeKey].push({ ...parsed })
+        category.scopes[scopeKey].push(parsed)
     }
 
     return Object.fromEntries(
-        Object.entries(categories).filter(([_, value]) =>
-            Object.keys(value.scopes).length > 0,
-        ),
+        Object.entries(categories).filter(([_, value]) => Object.keys(value.scopes).length > 0),
     ) as CategoryGitCommit
 }
