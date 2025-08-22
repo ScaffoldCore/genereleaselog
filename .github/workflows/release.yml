@@ -21,6 +21,10 @@ jobs:
           node-version: lts/*
 
       - run: npm install
+
+      - name: Debug TypeScript files
+        run: npx tsc --noEmit --project tsconfig.json
+
       - run: npm run build
       - run: npx genereleaselog
         env:
