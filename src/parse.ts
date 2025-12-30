@@ -7,31 +7,77 @@ import type {
 } from '@/src/types.ts'
 import { isNotNull } from '@/src/utils.ts'
 
-export function transformCommits(commit: string): IRawGitCommit[] {
-    return commit.split('---\n')
-        .splice(1)
-        .map((item: string) => {
-            const [firstLine = '', ..._body] = item.split('\n')
+const authorCache = new Map<string, string>()
+async function fetchAuthorName(
+    email: string,
+    fallback: string,
+): Promise<string> {
+    if (!email)
+        return fallback
 
-            const [commits, shortHash, message, authorName, authorEmail, date] = firstLine.split('|')
+    if (authorCache.has(email)) {
+        return authorCache.get(email)!
+    }
+
+    try {
+        const res = await fetch(`https://ungh.cc/users/find/${email}`)
+        const data = await res.json()
+        const authorName = data?.user?.username || fallback
+
+        authorCache.set(email, authorName)
+        return authorName
+    }
+    catch {
+        return fallback
+    }
+}
+
+export async function transformCommits(
+    commit: string,
+): Promise<IRawGitCommit[]> {
+    const chunks = commit
+        .split('---\n')
+        .slice(1)
+
+    return Promise.all(
+        chunks.map(async (item) => {
+            const [firstLine = '', ...bodyLines] = item.split('\n')
+
+            const [
+                commits = '',
+                shortHash = '',
+                message = '',
+                authorName = '',
+                authorEmail = '',
+                date = '',
+            ] = firstLine.split('|').map(s => s.trim())
+
+            const resolvedAuthorName = await fetchAuthorName(
+                authorEmail,
+                authorName,
+            )
 
             return {
                 commits,
                 shortHash,
                 message,
+                date,
+                body: bodyLines.join('\n').trim(),
                 author: {
-                    authorName,
+                    authorName: resolvedAuthorName,
                     authorEmail,
                 },
-                date,
-                body: _body.join('\n'),
             }
-        }) as IRawGitCommit[]
+        }),
+    )
 }
 
-export function parseCommits(commit: string): IParseCommit[] {
-    return transformCommits(commit)
-        .map(commit => parseGitCommit(commit))
+export async function parseCommits(commit: string): Promise<IParseCommit[]> {
+    // console.log(transformCommits(commit))
+    //
+    // return ['']
+    const parsed = await transformCommits(commit)
+    return parsed.map(commit => parseGitCommit(commit))
         .filter(isNotNull)
 }
 
