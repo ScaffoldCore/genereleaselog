@@ -73,9 +73,6 @@ export async function transformCommits(
 }
 
 export async function parseCommits(commit: string): Promise<IParseCommit[]> {
-    // console.log(transformCommits(commit))
-    //
-    // return ['']
     const parsed = await transformCommits(commit)
     return parsed.map(commit => parseGitCommit(commit))
         .filter(isNotNull)
