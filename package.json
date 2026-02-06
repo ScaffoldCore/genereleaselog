@@ -18,11 +18,11 @@
         "changelog",
         "log"
     ],
-    "main": "dist/index.js",
+    "main": "dist/index.mjs",
     "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
+    "types": "dist/index.d.mts",
     "bin": {
-        "genereleaselog": "./src/bin/index.js"
+        "genereleaselog": "bin/index.js"
     },
     "files": [
         "dist"
