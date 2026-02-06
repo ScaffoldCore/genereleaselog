@@ -1,7 +1,5 @@
 // eslint.config.js
 import antfu from '@antfu/eslint-config'
-import yml from 'eslint-plugin-yml'
-import yamlParser from 'yaml-eslint-parser'
 
 export default antfu({
     typescript: true,
@@ -20,26 +18,9 @@ export default antfu({
         'vue/block-order': 'off',
         'vue/valid-template-root': 'off',
     },
-}, {
-    files: ['**/*.yml', '**/*.yaml'],
-    languageOptions: {
-        parser: yamlParser,
-    },
-    plugins: {
-        yml,
-    },
-    rules: {
-        'yml/indent': ['error', 2],
-    },
-}, {
-    files: ['**/*.md/*.yml', '**/*.md/*.yaml'], // markdown 中提取的 yml 代码块
-    languageOptions: {
-        parser: yamlParser,
-    },
-    plugins: {
-        yml,
-    },
-    rules: {
-        'yml/indent': ['error', 2],
+    yaml: {
+        overrides: {
+            'yaml/indent': ['error', 2],
+        },
     },
 })
