@@ -33,7 +33,8 @@
         "lint:fix": "eslint --fix",
         "release": "npm run build && npm publish",
         "git:release": "tsx src/cli.ts",
-        "prepublishOnly": "npm run build"
+        "prepublishOnly": "npm run build",
+        "prepare": "simple-git-hooks"
     },
     "publishConfig": {
         "registry": "https://registry.npmjs.org",
