@@ -22,13 +22,19 @@ export function generateMarkdown(commits: CategoryGitCommit, options: ResolvedCh
                 })
             }
             else {
-                lines.push(`- **${scope}**`)
-                scopeCommit.forEach((commit: IParseCommit, index: number) => {
-                    lines.push(`  - ${formatCommits(commit, options)}`)
-                    if (index === scopeLength - 1) {
-                        lines.push(` `)
-                    }
-                })
+                if (scopeLength === 1) {
+                    lines.push(`- **${scope}**: ${formatCommits(scopeCommit[0], options)}`)
+                    lines.push(` `)
+                }
+                else {
+                    lines.push(`- **${scope}**`)
+                    scopeCommit.forEach((commit: IParseCommit, index: number) => {
+                        lines.push(`  - ${formatCommits(commit, options)}`)
+                        if (index === scopeLength - 1) {
+                            lines.push(` `)
+                        }
+                    })
+                }
             }
         }
     }
